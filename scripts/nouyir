@@ -1,0 +1,41 @@
+#! /usr/bin/env python3
+import argparse
+import datetime
+import colorlog
+
+from pathlib import Path
+
+from nouyir.core import Tester
+from nouyir.utils import get_config_from_pad
+
+# logging
+logger = colorlog.getLogger()
+formatter = colorlog.ColoredFormatter('%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+sh = colorlog.StreamHandler()
+sh.setFormatter(formatter)
+logger.addHandler(sh)
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pad", "-p", type=str, help="get configuration from the etherpadlite at this url")
+    parser.add_argument("--config", "-c", type=str, help="config file path")
+    parser.add_argument("--level", "-l", type=str, help="debug level", default="INFO",choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"])
+    args = parser.parse_args()
+    logger.setLevel(args.level)
+    current_time = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+
+    if args.pad:
+        if args.pad.endswith("export/txt"):
+            pad_url = args.pad
+        else:
+            pad_url = args.pad + "/export/txt"
+        config_file = get_config_from_pad(pad_url, current_time)
+    elif args.config:
+        config_file = Path(args.config)
+    else:
+        config_file = Path("api.yml")
+
+    tester = Tester(config_file)
+    tester.run()
