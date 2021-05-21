@@ -1,42 +1,60 @@
-# Prérequis
- * `python` >= 3.9
- * `requests`
- * `pyyaml`
- * `colorlog`
- # Fichier de configuration
+# How to run
+`nouyir [-h] [--pad PAD] [--config CONFIG] [--level {CRITICAL,ERROR,WARNING,INFO,DEBUG}]`
 
-## Sites de l'api à query
+You can use a local yaml config file or a etherpad-lite url.
+
+# Setup
+
+```
+python3 -m venv env
+source env/bin/activate
+pip install https://github.com/mpaulon/nouyir
+```
+
+
+# Configuration
+## API base urls
 ```yml
 base_urls:
-  <site_name>: <site_url>
+  <site name>: "<site url>"
 ```
+
 ## Credentials
 ```yml
-credentials: # liste des utilisateurs pour lesquels on récupère des tokens
-  - name: <nom de l'user à utiliser dans les tests>
-    username: <username>
-    password: <password>
-    base: <base_url à query pour récupérer un token jwt>
-    endpoint: <endpoint à query>
-    token_name: <attribut de la réponse contenant le token>
+credentials:
+  - name: <local name>
+    username: <login on the api>
+    password: <password on the api>
+    base: <site name to use for login>
+    endpoint: <endpoint to append at the end of site url>
+    token_name: <name of the token field in the api response>
 ```
+
 ## Tests
 ```yml
 tests:
-  - name: <nom du test>
-    users: # liste des utilisateurs pour lesquels on effectue la requête
-      - <nom de l'user>
-    request: <type de requete (GET, POST, PUT, DELETE)
-    base: <base_url à query>
-    endpoint: <endpoint à query, peut contenir des variables sauvegardées entre {} si on veut ajouter des  { ou } il faut les échapper avec le format {{ = { et }} = }>
-    content: <dictionaire à passer sous format json à l'endpoint>
-    save: # variables à sauvegarder pour d'autres tests au format suivant
-      <clef dans la réponse>: <nom de la variable">
-    required_code: <code http requis pour considérer la requête comme réussie, par défaut, on valid si 2XX>
-    required_values: <valide si ce dictionnaire ou cette liste est inclu.se au même "niveau" dans la réponse>
-    ignore_failed: <continue l'execution des tests même si celui-ci fail>
-    tests_required: <liste des noms des tests qui doivent avoir réussi pour lancer ce test>
+  - name: <test name>
+    request: <request type {GET, POST, PUT, DELETE}>
+    users:
+      - <credential name 1>
+      - ...
+      - <credentia name N>
+    base: <site name to use for login>
+    endpoint: <endpoint to append at the end of site url> # can contain a local variable with {<variable name>}
+    # all the previous fields are mandatory, you can add one or more optional fields too:
+    content: <content for a POST/PUT request>
+    saved: # save a field of the request in a local variable
+      <response field>: <local variable>
+    saved_content: # use a local variable in the request
+      <request field>: <local variable>
+    required_code: <http response code required to consider this request as valid (by default all 2XX codes are considered valid)>
 ```
+
+
+
+
+
+
 
 # Features non implémentées
 
