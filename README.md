@@ -8,7 +8,7 @@ You can use a local yaml config file or a etherpad-lite url.
 ```
 python3 -m venv env
 source env/bin/activate
-pip install https://github.com/mpaulon/nouyir
+pip install git+https://github.com/mpaulon/nouyir
 ```
 
 
