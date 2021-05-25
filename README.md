@@ -19,6 +19,12 @@ base_urls:
   <site name>: "<site url>"
 ```
 
+## Tokens
+```yml
+tokens:
+  <token name>: <token>
+```
+
 ## Credentials
 ```yml
 credentials:
@@ -35,6 +41,8 @@ credentials:
 tests:
   - name: <test name>
     request: <request type {GET, POST, PUT, DELETE}>
+    tokens:
+      - <token_name>
     users:
       - <credential name 1>
       - ...

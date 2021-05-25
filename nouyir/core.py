@@ -168,6 +168,8 @@ class Tester:
         self.users = dict()
         for user in credentials:
             self.users[user.get("name")] = self._get_token(user)
+        self.tokens = self.config.get("tokens", {})
+
 
     def _get_url(self, point):
         endpoint = point.get("endpoint")
@@ -179,9 +181,11 @@ class Tester:
             return None
         return self.base_urls.get(point.get("base")) + endpoint
 
-    def _run_query(self, user, test):
+    def _run_query(self, test, user=None, token=None):
         if user:
             headers = {"Authorization": f"JWT {self.users.get(user)}"} 
+        elif token:
+            headers = {"X-INTERNAL-API-AUTH-TOKEN": {self.tokens.get(token)}}
         else:
             headers = dict()
         content = test.get("content", {})
@@ -228,8 +232,10 @@ class Tester:
             if missing_requirements:
                 logger.error("Missing requirements")
                 return
+        for token in test.get("tokens", []):
+            self._run_query(test, token=token)
         for user in test.get("users", [None]):
-            self._run_query(user, test)
+            self._run_query(test, user=user)
 
     def run(self):
         for test in self.config.get("tests"):
