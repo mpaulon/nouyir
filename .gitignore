@@ -1,3 +1,6 @@
 env/
 errors/
 configs/
+
+__pycache__/
+*.egg-info/

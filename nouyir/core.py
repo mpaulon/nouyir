@@ -95,7 +95,7 @@ class Tester:
 
 
     def _failed_request(self, request):
-        file_name = request.url.strip("/").replace("/", ".")
+        file_name = request.url.strip("/").replace("/", ".").replace(":",".").replace("?", ".")
         error_file = self.errors_folder/f"{file_name}.html"
         with open(error_file, "wb") as out:
             out.write(request.content)
