@@ -58,28 +58,18 @@ tests:
     required_code: <http response code required to consider this request as valid (by default all 2XX codes are considered valid)>
 ```
 
-
-
-
-
-
-
-# Features non implémentées
-
- * utiliser du jinja dans la configuration (cf ansible)
-   * par défaut un sauvegarde le résultat de toutes les requetes et on peut ensuite y accéder via un dictionnaire dans les templates jinja
-
- * meilleure gestion des utilisateurs multiples
-   * sauvegarde des variables par user
- * possibilité de sauvegarder des variables à n'importe quel niveau (pour l'instant on ne peut sauvegarder que des variables qui sont des clefs d'un dictionnaire renvoyé)
- * meilleure gestion des paramètres dans l'url
- * génération d'un compte rendu de tests à la fin
- * gestion du niveau de logs
- * génération des tests à partir d'une spécification de l'api (voir standards existant)
-   * vérification de la couverture des tests à partir d'une spécification de l'api
- * génération de documentation/exemples au format html à partir du yaml de tests
- * support de backends de stockage des mots de passe/login (fichiers gpg, pass ...)
- * refactor des fichiers de configuration
- * support des loops (cf ansible)
- * support de l'upload/download de fichiers
- * support d'autres systèmes d'authentification
+# TODO
+  * use "real" jinja in config file (maybe use each statement as jinja template ?!)
+  * better handling of multiple users (maybe with things similar to host_vars/group_vars in ansible)
+    * by default save variables under user namespace ?
+  * handle saving nested values in responses -> best way: save the whole response and access the variables needed in jinja template later
+  * handling pagination
+  * generate summary (maybe INFO level logs in a file + line with "x tests passed, y tests failed ...")
+  * generate tests based on openAPI or other kind of api specifications 
+    * use API spec to check tests coverage
+  * generate documentation based on tests (maybe add a field comment/docstring in the tests, need to find a way to merge tests on the same endpoints)
+  * add support for password storage backends (maybe add a "password_command" in the users declaration)
+  * refactor config files (separate users, variables, tokens, and tests) -> how to handle this with pads ? maybe use delimiters in a single pad ?
+  * add upload/download support to allow testing on file handling by the API
+  * refactor auth management (we only support one kind of header for users and one kind for tokens, maybe add a field to specify the header format ?)
+  * support things like loops in ansible, to be able to test the same endpoint with multiple parameters
