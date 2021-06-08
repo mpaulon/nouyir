@@ -40,7 +40,7 @@ credentials:
 ```yml
 tests:
   - name: <test name>
-    request: <request type {GET, POST, PUT, DELETE}>
+    request: <request type (GET, POST, PUT, DELETE)>
     tokens:
       - <token_name>
     users:
