@@ -22,7 +22,9 @@ base_urls:
 ## Tokens
 ```yml
 tokens:
-  <token name>: <token>
+  <token name>: 
+    header: <token header>
+    value: <token>
 ```
 
 ## Credentials

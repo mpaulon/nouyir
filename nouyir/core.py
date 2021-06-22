@@ -185,7 +185,8 @@ class Tester:
         if user:
             headers = {"Authorization": f"JWT {self.users.get(user)}"} 
         elif token:
-            headers = {"X-INTERNAL-API-AUTH-TOKEN": {self.tokens.get(token)}}
+            tk = self.tokens.get(token)
+            headers = {tk.get("header"): tk.get("value")}
         else:
             headers = dict()
         content = test.get("content", {})
