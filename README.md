@@ -52,6 +52,8 @@ tests:
     base: <site name to use for login>
     endpoint: <endpoint to append at the end of site url> # can contain a local variable with {<variable name>}
     # all the previous fields are mandatory, you can add one or more optional fields too:
+    files:
+      <name>: <path> # upload the selected file
     content: <content for a POST/PUT request>
     saved: # save a field of the request in a local variable
       <response field>: <local variable>

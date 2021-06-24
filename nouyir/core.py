@@ -181,6 +181,12 @@ class Tester:
             return None
         return self.base_urls.get(point.get("base")) + endpoint
 
+    def _get_files(self, files):
+        f = {}
+        for name, path in files.items():
+            f[name] = open(path, "rb")
+        return f
+
     def _run_query(self, test, user=None, token=None):
         if user:
             headers = {"Authorization": f"JWT {self.users.get(user)}"} 
@@ -197,6 +203,7 @@ class Tester:
             except KeyError as e:
                 logger.error(str(e))
                 return
+        files = self._get_files(test.get("files", {}))
         url = self._get_url(test)
         if url is None: return
         logger.debug(f"Running query to {url} for user {user} with content {content} and headers {headers}")
@@ -205,7 +212,8 @@ class Tester:
             required_code,
             url,
             json=content,
-            headers=headers
+            headers=headers,
+            files=files,
         )
         if response is None:
             return
